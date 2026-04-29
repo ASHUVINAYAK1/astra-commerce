@@ -3,23 +3,45 @@ name: Astra CI Pipeline
 on:
   pull_request:
     branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
+    name: Build & Test All Modules
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - name: Setup Java 17 (Temurin)
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
+          cache: maven
 
-      - name: Build
-        run: mvn clean install || true
+      - name: Validate Maven Project Structure
+        run: mvn validate --no-transfer-progress
 
-      - name: Run Tests
-        run: mvn test || true
+      - name: Build All Modules
+        run: mvn clean install -DskipTests --no-transfer-progress
+        # NOTE: No || true — build MUST succeed for CI to pass
+
+      - name: Run All Tests
+        run: mvn test --no-transfer-progress
+        # NOTE: No || true — tests MUST pass for CI to pass
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        if: always()    # Upload even on failure for debugging
+        with:
+          name: test-reports
+          path: '**/target/surefire-reports/*.xml'
+          retention-days: 7
+
+      - name: Check for Build Artifacts
+        run: |
+          echo "=== Checking built JARs ==="
+          find . -name "*.jar" -path "*/target/*" | grep -v "original" | head -20

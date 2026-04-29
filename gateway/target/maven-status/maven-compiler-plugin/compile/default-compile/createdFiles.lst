@@ -1,0 +1,4 @@
+com\astracommerce\gateway\filter\JwtAuthenticationFilter$Config.class
+com\astracommerce\gateway\controller\FallbackController.class
+com\astracommerce\gateway\filter\JwtAuthenticationFilter.class
+com\astracommerce\gateway\GatewayApplication.class

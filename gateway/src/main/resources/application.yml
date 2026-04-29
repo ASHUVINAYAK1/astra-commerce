@@ -1,0 +1,146 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  cloud:
+    gateway:
+      # ── Global CORS config ─────────────────────────────────
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+            allowedHeaders: "*"
+
+      # ── Route Definitions ──────────────────────────────────
+      # All routes use lb:// (load-balanced via Eureka)
+      routes:
+        # User Service — auth + users
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/auth/**, /users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceCB
+                fallbackUri: forward:/fallback/user-service
+
+        # Product Service
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/products/**
+          filters:
+            - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: productServiceCB
+                fallbackUri: forward:/fallback/product-service
+
+        # Order Service
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/orders/**
+          filters:
+            - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: orderServiceCB
+                fallbackUri: forward:/fallback/order-service
+
+        # Inventory Service
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: inventoryServiceCB
+                fallbackUri: forward:/fallback/inventory-service
+
+        # Payment Service
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payments/**
+          filters:
+            - JwtAuthenticationFilter
+
+        # Notification Service
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notifications/**
+          filters:
+            - JwtAuthenticationFilter
+
+  # ── Redis for rate limiting ────────────────────────────────
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+# ── Eureka Client ──────────────────────────────────────────
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:eureka-secret@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# ── JWT ────────────────────────────────────────────────────
+jwt:
+  secret: ${JWT_SECRET:aXN0cmFjb21tZXJjZS1zdXBlci1zZWNyZXQta2V5LTI1NmJpdHMhIQ==}
+
+# ── Actuator ───────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info,gateway
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# ── Resilience4j Circuit Breakers ─────────────────────────
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+      productServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+      orderServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+      inventoryServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+
+logging:
+  level:
+    com.astracommerce: DEBUG
+    org.springframework.cloud.gateway: INFO

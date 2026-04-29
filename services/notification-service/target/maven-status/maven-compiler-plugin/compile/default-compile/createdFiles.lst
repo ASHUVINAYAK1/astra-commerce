@@ -1,0 +1,4 @@
+com\astracommerce\notificationservice\NotificationServiceApplication.class
+com\astracommerce\notificationservice\event\OrderPlacedEvent$OrderPlacedEventBuilder.class
+com\astracommerce\notificationservice\event\OrderPlacedEvent.class
+com\astracommerce\notificationservice\kafka\NotificationEventConsumer.class

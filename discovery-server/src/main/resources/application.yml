@@ -1,0 +1,33 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-server
+  security:
+    user:
+      name: eureka
+      password: ${EUREKA_PASSWORD:eureka-secret}
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false   # Server does not register itself
+    fetch-registry: false
+    service-url:
+      defaultZone: http://eureka:${EUREKA_PASSWORD:eureka-secret}@localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.netflix.eureka: WARN
+    com.netflix.discovery: WARN

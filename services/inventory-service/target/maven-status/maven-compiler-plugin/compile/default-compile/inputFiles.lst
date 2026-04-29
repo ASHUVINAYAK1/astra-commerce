@@ -1,0 +1,13 @@
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\security\JwtAuthFilter.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\dto\InventoryResponse.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\config\SecurityConfig.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\repository\InventoryRepository.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\security\JwtService.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\controller\InventoryController.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\InventoryServiceApplication.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\event\OrderPlacedEvent.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\exception\GlobalExceptionHandler.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\kafka\InventoryEventConsumer.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\service\InventoryService.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\service\InventoryServiceImpl.java
+C:\Users\Admin\Downloads\my-projects\astra-commerce\services\inventory-service\src\main\java\com\astracommerce\inventoryservice\entity\Inventory.java
